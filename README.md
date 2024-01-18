@@ -1,6 +1,6 @@
 # showimagepixel2
-
-A new Flutter project.
+A flutter app to open local or remote image and click a point to show a pixel color value.
+A zip file is a web deploy.
 
 ## Getting Started
 
