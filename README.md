@@ -1,6 +1,8 @@
 # showimagepixel2
 A flutter app to open local or remote image and click a point to show a pixel color value.
-A zip file is a web deploy. This zip file contains an index file, where base address (=local directory) is showpixel . So
+A zip file is a web deploy. This zip file contains an index file, where base address (=local directory) is showpixel .
+If you wil install this app, unzip this zip file into subdirectory: showpixel and by example to start in some browser,
+whrite http://localhost:xxxx/showpixel/ .
 
 ## Getting Started
 
