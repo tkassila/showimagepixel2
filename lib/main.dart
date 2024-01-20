@@ -105,26 +105,30 @@ class MyAppState extends State<MyHomePage> {
   final ImagePicker _picker = ImagePicker();
   Color? selectedColor; // Colors.green;
 // CHANGE THIS FLAG TO TEST BASIC IMAGE, AND SNAPSHOT.
-  bool useSnapshot = false;
+  bool useSnapshot = true;
   String? _loadUrl;
   String? _loadFromNetwork;
 // based on useSnapshot=true ? paintKey : imageKey ;
 // this key is used in this example to keep the code shorter.
   late GlobalKey currentKey;
-  double? _box_height = null;
-  double? _box_width = null;
+  double? _box_height;
+  double? _box_width;
   final StreamController _stateController = StreamController();
   final TextEditingController _controller = TextEditingController();
   bool loading = false;
 
 //late img.Image photo ;
   img.Image? photo;
+  img.Image? unModifiedLoadPhoto;
+  ByteData? snapShotBytes;
   int intHex = 0;
   String strHex = "";
   double x = 0.0;
   double y = 0.0;
   ByteData? /* Uint8List? */ _imageBytes;
-  Uint8List? _imageInt8List;
+  Uint8List? _imageInt8List; 
+  Uint8List? unModifiedLoadImageInt8List;
+
   dynamic _pickImageError;
   double? maxWidth;
   double? maxHeight;
@@ -145,6 +149,7 @@ class MyAppState extends State<MyHomePage> {
   @override
   void initState() {
     currentKey = useSnapshot ? paintKey : imageKey;   
+    selectedColor = Colors.green;
     /*
     if (kIsWeb)
     {
@@ -215,7 +220,8 @@ class MyAppState extends State<MyHomePage> {
     var result = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ImagePopUp(photo: photo!, imageInt8List: _imageInt8List,
+            builder: (context) => ImagePopUp(photo: unModifiedLoadPhoto, 
+              imageInt8List: unModifiedLoadImageInt8List,
               loadFromNetwork: _loadFromNetwork, mainSelectedColor: selectedColor,
           )            
        ),
@@ -251,7 +257,7 @@ class MyAppState extends State<MyHomePage> {
 
     _imageBytes = null;
     _imageInt8List = null;
-
+    snapShotBytes = null;
   //  waitAnimation(context);
 
     setState(() {
@@ -263,7 +269,9 @@ class MyAppState extends State<MyHomePage> {
         _loadFromNetwork = _loadUrl;
        // _imageInt8List = await FileHandler(_loadUrl!)._readToBytes();      
         _imageInt8List = loadedData;
-        setImageUint8List(/* _imageInt8List! */);            
+        unModifiedLoadImageInt8List = _imageInt8List;
+        setImageUint8List(/* _imageInt8List! */); 
+        unModifiedLoadPhoto = photo;           
         loading = false;
     });
 
@@ -298,7 +306,7 @@ class MyAppState extends State<MyHomePage> {
 
       _imageBytes = null;
       _imageInt8List = null;
-
+      snapShotBytes = null;
 
       String? imagePath2 = pickedF.path;
       if (kDebugMode) {
@@ -316,9 +324,11 @@ class MyAppState extends State<MyHomePage> {
 
         setState(() {
           _imageInt8List = uint8list2;
+          unModifiedLoadImageInt8List = _imageInt8List;
           _loadFromNetwork = null;
           // _imageBytes = pickedF?.readAsBytes() as Uint8List?;
           setImageUint8List(/* _imageInt8List! */);
+          unModifiedLoadPhoto = photo;
           imagePath = imagePath2;
           loading = false;
           // _imageBytes = _readFileBytes(imagePath!);
@@ -361,9 +371,11 @@ class MyAppState extends State<MyHomePage> {
     }
   }
 
+  /*
   void textFieldChanged(String value){
 
   }
+  */
 
   ImageProvider getImageProvider(){
     return _loadFromNetwork == null ? FileImage(File(imagePath!)) :
@@ -493,17 +505,17 @@ class MyAppState extends State<MyHomePage> {
           //  ),
           //  );
        // ret;
-IntrinsicWidth(
-        child:         IntrinsicHeight(
-      child: 
-      SizedBox(
+        IntrinsicWidth(
+        child: IntrinsicHeight(
+          child: 
+          SizedBox(
          height: 350 ,
          width: 500,
       //      height: pageHeight == null ? 350 : pageHeight,
       //      width: pageWidth == null ? 400 : pageWidth,
             child: ret,
-      ),      
-      ),
+            ),      
+            ),
         );
 /*      ),
        );
@@ -972,6 +984,11 @@ IntrinsicWidth(
      // await (useSnapshot ? loadSnapshotBytes() : loadImageBundleBytes());
       return;
     }
+    if (useSnapshot && snapShotBytes == null) // use showen image widget as region can get its bytes as png:
+    {
+      unModifiedLoadImageInt8List = _imageInt8List;
+      await loadSnapshotBytes();
+    }
     _calculatePixel(globalPosition);
   }
 
@@ -1034,6 +1051,7 @@ IntrinsicWidth(
 
     ByteData? imageBytes =
     await capture.toByteData(format: ui.ImageByteFormat.png);
+    snapShotBytes = imageBytes;
     setImageBytes(imageBytes!);
     capture.dispose();
   }

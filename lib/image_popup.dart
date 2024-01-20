@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart';
+import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart';
 
 class ImagePopUp extends StatefulWidget {
- final img.Image photo;
+ final img.Image? photo;
  final Uint8List? imageInt8List;
  final   String? loadFromNetwork;
  final Color? mainSelectedColor; // Colors.green;
@@ -23,7 +26,6 @@ class ImagePopUpState extends State<ImagePopUp> {
   GlobalKey imageKey = GlobalKey();
   GlobalKey paintKey = GlobalKey();
   late GlobalKey currentKey;
-  bool useSnapshot = false;
   int intHex = 0;
   String strHex = "";
   double x = 0.0;
@@ -33,6 +35,12 @@ class ImagePopUpState extends State<ImagePopUp> {
   double? _pageHeight = 0.0;
   double? _pageWidth = 0.0;
   BuildContext? myContext;
+  bool useSnapshot = false;
+  ByteData? snapShotBytes;
+  ByteData? /* Uint8List? */ _imageBytes;
+  Uint8List? _imageInt8List;
+  img.Image? photo;
+  String? imagePath;
 
   int hexOfRGB(int r,int g,int b)
   {
@@ -46,24 +54,58 @@ class ImagePopUpState extends State<ImagePopUp> {
   }
 
   void searchPixel(Offset globalPosition) async {
+    if (useSnapshot && snapShotBytes == null) // use showen image widget as region can get its bytes as png:
+    {
+      await loadSnapshotBytes();
+    }
     _calculatePixel(globalPosition);
   }
 
+ Future loadSnapshotBytes() async {
+    RenderRepaintBoundary boxPaint =
+        paintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+//RenderObject? boxPaint = paintKey.currentContext.findRenderObject();
+    ui.Image capture = await boxPaint.toImage();
+
+    ByteData? imageBytes =
+    await capture.toByteData(format: ui.ImageByteFormat.png);
+    snapShotBytes = imageBytes;
+    setImageBytes(imageBytes!);
+    capture.dispose();
+  }
+
+  void setImageUint8List(/* Uint8List values */) {
+    photo = img.decodeImage(_imageInt8List!)!;
+    if (photo == null) {
+      print("photo is null");
+    }
+  // _imageInt8List = img.encodePng(photo!); // img.encodeNamedImage(imagePath!, photo!);
+    if (kDebugMode) {
+      print("end of setImageUint8List");
+      print("imagePath '$imagePath'");
+    }
+  }
+
   void _calculatePixel(Offset globalPosition) {
-    RenderBox box = /* paintKey */ imageKey.currentContext!.findRenderObject() as RenderBox;
+    if (widget.photo == null)
+    {
+      return;
+    }
+
+    RenderBox box = /* imageKey  */ paintKey.currentContext!.findRenderObject() as RenderBox;
     Offset localPosition = box.globalToLocal(globalPosition);
 
     double px = localPosition.dx;
     double py = localPosition.dy;
 
     if (!useSnapshot) {
-      double widgetScale = box.size.width / widget.photo.width;
+      double widgetScale = box.size.width / widget.photo!.width;
     //  print(py);
       px = (px / widgetScale);
       py = (py / widgetScale);
     }
 
-    img.Pixel pixel32 = widget.photo.getPixelSafe(px.toInt(), py.toInt());
+    img.Pixel pixel32 = widget.photo!.getPixelSafe(px.toInt(), py.toInt());
     int hex = hexOfRGB(pixel32.r.toInt(), pixel32.g.toInt(), pixel32.b.toInt()); // pixel32.toString();
     // int hex = abgrToArgb(pixel32);
 
@@ -89,9 +131,20 @@ class ImagePopUpState extends State<ImagePopUp> {
         super.dispose();
   }
 
+
+  void setImageBytes(ByteData? imageBytes) {
+    if (imageBytes == null) {
+      return;
+    }
+    // Uint8List values = imageBytes.buffer.asUint8List();
+    _imageInt8List = imageBytes.buffer.asUint8List();
+    setImageUint8List(/* values */);
+  }
+
   @override
   void initState() {
     super.initState();
+    currentKey = useSnapshot ? paintKey : imageKey;   
     selectedColor = widget.mainSelectedColor;
     intHex = (selectedColor != null && selectedColor!.value != null ? selectedColor!.value : 0);
     strHex = "0x${intHex.toRadixString(16)}";
@@ -243,7 +296,7 @@ IntrinsicWidth(
   @override
   Widget build(BuildContext context) {
     myContext = context;
-    Color mySelectedColor = selectedColor ?? Colors.white;
+   // Color mySelectedColor = selectedColor ?? Colors.white;
     String strTitle = 'Select picture color on pixel: $intHex $strHex';
     return  WillPopScope(
     onWillPop: _onBackPressed,
@@ -252,10 +305,10 @@ IntrinsicWidth(
       appBar: AppBar(
         title: Text(strTitle,
         style: TextStyle(
-          color: mySelectedColor.computeLuminance() > 0.5
+          color: selectedColor!.computeLuminance() > 0.5
                           ? Colors.black
                           : Colors.white, fontWeight: FontWeight.bold,                                  
-          backgroundColor: mySelectedColor,
+          backgroundColor: selectedColor,
           )
         ),
       ),
