@@ -99,9 +99,11 @@ class ImagePopUpState extends State<ImagePopUp> {
 
   Widget getImage(double? pageHeight, double? pageWidth){
 
+    /*
       print('- the new height is $pageHeight');
       print('- the new Width is $pageWidth');
-
+    */
+    
     Widget ret =  (widget.imageInt8List != null ? Image.memory(widget.imageInt8List!,
                     scale: 0.7,
                           //     height: 350,
@@ -241,6 +243,7 @@ IntrinsicWidth(
   @override
   Widget build(BuildContext context) {
     myContext = context;
+    Color mySelectedColor = selectedColor ?? Colors.white;
     String strTitle = 'Select picture color on pixel: $intHex $strHex';
     return  WillPopScope(
     onWillPop: _onBackPressed,
@@ -249,8 +252,10 @@ IntrinsicWidth(
       appBar: AppBar(
         title: Text(strTitle,
         style: TextStyle(
-          color: Colors.black, fontWeight: FontWeight.bold,                                  
-          backgroundColor: selectedColor ?? Colors.white,
+          color: mySelectedColor.computeLuminance() > 0.5
+                          ? Colors.black
+                          : Colors.white, fontWeight: FontWeight.bold,                                  
+          backgroundColor: mySelectedColor,
           )
         ),
       ),

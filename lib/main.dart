@@ -115,6 +115,7 @@ class MyAppState extends State<MyHomePage> {
   double? _box_width = null;
   final StreamController _stateController = StreamController();
   final TextEditingController _controller = TextEditingController();
+  bool loading = false;
 
 //late img.Image photo ;
   img.Image? photo;
@@ -235,7 +236,7 @@ class MyAppState extends State<MyHomePage> {
     }
   }
 
-  Future _onLoadImageButtonPressed() async
+  Future<void> _onLoadImageButtonPressed(BuildContext context) async
   {
     /*
     print("_onLoadImageButtonPressed");
@@ -250,12 +251,20 @@ class MyAppState extends State<MyHomePage> {
 
     _imageBytes = null;
     _imageInt8List = null;
-    var loaded = await imageFromUrl(_loadUrl!);
+
+  //  waitAnimation(context);
+
+    setState(() {
+        loading = true;
+    });
+
+    var loadedData = await imageFromUrl(_loadUrl!);
     setState(() {
         _loadFromNetwork = _loadUrl;
        // _imageInt8List = await FileHandler(_loadUrl!)._readToBytes();      
-        _imageInt8List = loaded;
+        _imageInt8List = loadedData;
         setImageUint8List(/* _imageInt8List! */);            
+        loading = false;
     });
 
     return;
@@ -264,6 +273,11 @@ class MyAppState extends State<MyHomePage> {
   Future<void> _onImageButtonPressed(ImageSource source,
       {BuildContext? context}) async {
     try {
+
+      setState(() {
+        loading = true;
+      });
+
       final XFile? pickedF = await _picker.pickImage(
         source: source,
         requestFullMetadata: false,
@@ -273,17 +287,26 @@ class MyAppState extends State<MyHomePage> {
           */
       );
 
+
       // final PickedFile? pickedF = await _picker.getImage(source: source);
-      _imageBytes = null;
-      _imageInt8List = null;
       if (pickedF == null) {
+        setState(() {
+          loading = false;
+        });
         return;
       }
+
+      _imageBytes = null;
+      _imageInt8List = null;
+
 
       String? imagePath2 = pickedF.path;
       if (kDebugMode) {
         print("imagePath2=$imagePath2");
       }
+
+      // ignore: use_build_context_synchronously
+      // waitAnimation(context!);
 
       // Uint8List bytes:
       Uint8List? uint8list2;
@@ -297,6 +320,7 @@ class MyAppState extends State<MyHomePage> {
           // _imageBytes = pickedF?.readAsBytes() as Uint8List?;
           setImageUint8List(/* _imageInt8List! */);
           imagePath = imagePath2;
+          loading = false;
           // _imageBytes = _readFileBytes(imagePath!);
 
           // Future<Uint8List>? uint8list = pickedF?.readAsBytes();
@@ -324,6 +348,9 @@ class MyAppState extends State<MyHomePage> {
         }
       }).catchError((onError) {
         print('Exception Error in _onImageButtonPressed: while reading:$onError');
+        setState(() {
+          loading = false;
+        });
         return;
       });
 
@@ -353,11 +380,13 @@ class MyAppState extends State<MyHomePage> {
 
   Widget getImage(double? pageHeight, double? pageWidth){
 
-      print('- the new height is $pageHeight');
+    /*  print('- the new height is $pageHeight');
       print('- the new Width is $pageWidth');
 
+    */
+
     Widget ret =  (kIsWeb
-                            ?  (_loadFromNetwork == null ? Image.memory(_imageInt8List!,
+                            ?  (_loadFromNetwork == null ? Image.memory(_imageInt8List!,                            
                           //     height: 350,
                           //     width: 400,
                         //        fit: BoxFit.contain,
@@ -376,6 +405,28 @@ class MyAppState extends State<MyHomePage> {
                         ) : Image.network(_loadFromNetwork!,    
                               height: 350,
                                width: 400,
+                               frameBuilder: (_, image, loadingBuilder, __) {
+                            if (loadingBuilder == null) {
+                              return const SizedBox(
+                                height: 300,
+                                child: Center(child: CircularProgressIndicator()),
+                              );
+                            }
+                            return image;
+                          },
+                          loadingBuilder: (BuildContext context, Widget image, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return image;
+                            return SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                        : null,
+                                ),
+                              ),
+                            );
+                          },
                           errorBuilder: (BuildContext context, Object error,
                               StackTrace? stackTrace) =>
                           const Center(
@@ -404,6 +455,28 @@ class MyAppState extends State<MyHomePage> {
                         ) : Image.network(_loadFromNetwork!,
                               height: 350,
                                width: 400,
+                               frameBuilder: (_, image, loadingBuilder, __) {
+                            if (loadingBuilder == null) {
+                              return const SizedBox(
+                                height: 300,
+                                child: Center(child: CircularProgressIndicator()),
+                              );
+                            }
+                            return image;
+                          },
+                          loadingBuilder: (BuildContext context, Widget image, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return image;
+                            return SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                        : null,
+                                ),
+                              ),
+                            );
+                          },
                           errorBuilder: (BuildContext context, Object error,
                               StackTrace? stackTrace) =>
                           const Center(
@@ -483,16 +556,35 @@ IntrinsicWidth(
      return ret;                   
   }
 
-  
+
+  /* Future<void> */ waitAnimation(BuildContext context) /* async */
+  {
+     showDialog(
+        context: context,
+        builder: (context){
+          return const Center(child: CircularProgressIndicator());
+        },  
+     );
+  }
+
   @override
   Widget build(BuildContext context) {
     final String title = useSnapshot ? "snapshot" : "basic";
     _pageHeight = _globalKey.currentContext?.size?.height;
     _pageWidth = _globalKey.currentContext?.size?.width;
 
+      /*
       print('the new height is $_pageHeight');
       print('the new Width is $_pageWidth');
-
+      */
+    Widget loadingAnimation = TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.0, end: 10),
+                          duration: const Duration(seconds: 10),
+                          builder: (context, value, _) => CircularProgressIndicator(value: value,
+                           semanticsLabel: 'Loading...',                           
+              semanticsValue: 'Loading...',              
+              strokeWidth: 20.0,),
+              );
 
     return SafeArea(
       minimum: const EdgeInsets.all(10.0),
@@ -503,8 +595,18 @@ IntrinsicWidth(
             stream: _stateController.stream,
             builder: (buildContext, snapshot) {
               // Color selectedColor = snapshot.data as Color ?? Colors.green;
-              return Container(
-                padding: const EdgeInsets.all(10.0),
+              return loading
+          ? const Center(
+                heightFactor: 10,
+                child: Text('Loading...',                           
+                style: TextStyle(fontSize: 27,
+                          backgroundColor: Colors.orange,
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                )
+            )      
+           :
+              Container(
+                padding: const EdgeInsets.all(5.0),
                 child: Column(                
                 children: [
                   Center(
@@ -530,7 +632,7 @@ IntrinsicWidth(
                       children: <Widget>[
                           const Row(children: [
                             Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.all(5.0),
                           child: Text(
                                   "1. Select picture to show",
                                   style: TextStyle(
@@ -539,7 +641,7 @@ IntrinsicWidth(
                               ),
                               ),
                           Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.all(5.0),
                           child: Text(
                                   "2. Klick on image pixel to show selected color after pressing Open dialog button",
                                   style: TextStyle(
@@ -579,7 +681,7 @@ IntrinsicWidth(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                             Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: MaterialButton(
                               color: Colors.blue,
                               child: const Text(
@@ -594,7 +696,7 @@ IntrinsicWidth(
                           ),
                         ),
                          Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: MaterialButton(
                               color: Colors.blue,
                               child: const Text(
@@ -604,12 +706,12 @@ IntrinsicWidth(
                                   )
                               ),
                               onPressed: () {
-                                _onLoadImageButtonPressed();
+                                _onLoadImageButtonPressed(context);
                               }
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: MaterialButton(
                               color: Colors.blue,
                               child: const Text(
@@ -626,7 +728,7 @@ IntrinsicWidth(
                                     ]          ,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: TextFormField(                      
                           decoration: const InputDecoration(
                               hintStyle: TextStyle(fontSize: 17),
@@ -643,7 +745,18 @@ IntrinsicWidth(
                         ],
                         ),
                               ),
-                             SizedBox(height: 20),
+                        const SizedBox(height: 5),
+                        SizedBox(height: 20,
+                              width: double.infinity,
+                          child: FloatingActionButton(
+                                  heroTag: null,
+                                  tooltip: 'Clicked color',
+                                  onPressed: null,
+                                  backgroundColor: selectedColor ?? Colors.green,
+                                ),
+                        ),
+                        const SizedBox(height: 5),
+
                           Container(                            
                        //     margin: const EdgeInsets.all(10.0),
                               decoration: BoxDecoration(
@@ -659,6 +772,7 @@ IntrinsicWidth(
                         // ignore: unnecessary_const
                         children: <Widget>[
                         Container(
+                          margin: const EdgeInsets.all(0.0),
                                   color: Colors.white,
                                   height: 25,
                                   width: 50,
@@ -671,7 +785,7 @@ IntrinsicWidth(
            ),
                    ),
                   Center(child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: Center(child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               verticalDirection: VerticalDirection.down,
@@ -685,6 +799,7 @@ IntrinsicWidth(
                                   style: Theme.of(context).textTheme.headlineSmall,
                                 ),
                                 FloatingActionButton(
+                                  heroTag: null,
                                   tooltip: 'Clicked color',
                                   onPressed: null,
                                   backgroundColor: selectedColor ?? Colors.green,
@@ -712,10 +827,7 @@ IntrinsicWidth(
                                 backgroundColor: Colors.blue,
                                 ),                                
                                 onPressed: () async {
-                                  if (!_isButtonDisabled)
-                                  {
-                                    Clipboard.setData(ClipboardData(text: intHex.toString()));
-                                  }
+                                    Clipboard.setData(ClipboardData(text: intHex.toString()));                                  
                                 },                                          
                                 child: const Text("Copy int color value into clipboard"),
                               ),
