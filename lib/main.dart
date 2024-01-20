@@ -2,14 +2,23 @@
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:io';
-import 'package:http/http.dart';
 
+import 'package:http/http.dart';
+// import 'package:flutter/painting.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:image_picker/image_picker.dart';
+import 'package:showimagepixel2/image_scroller.dart';
+import 'package:showimagepixel2/PlaceSelectedImage.dart';
+
+import 'image_popup.dart';
+
+
 //import 'package:video_player/video_player.dart';
 
 // import 'package:dart_ipify/dart_ipify.dart';
@@ -27,14 +36,14 @@ class MyApp extends StatelessWidget {
   // const MyApp({super.key});
   const MyApp({
    required this.ipv4,
-      Key? key,
-  }) : super(key: key);
+      super.key,
+  });
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Show picture pixel color',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -102,7 +111,8 @@ class MyAppState extends State<MyHomePage> {
 // based on useSnapshot=true ? paintKey : imageKey ;
 // this key is used in this example to keep the code shorter.
   late GlobalKey currentKey;
-
+  double? _box_height = null;
+  double? _box_width = null;
   final StreamController _stateController = StreamController();
   final TextEditingController _controller = TextEditingController();
 
@@ -120,6 +130,9 @@ class MyAppState extends State<MyHomePage> {
   int? quality;
   File? pickedFile;
   final MethodChannel _channel = const MethodChannel('get_ip');
+  double? _pageHeight = 0.0;
+  double? _pageWidth = 0.0;
+  GlobalKey _globalKey = GlobalKey();
 
   @override
   void dispose() {
@@ -130,7 +143,7 @@ class MyAppState extends State<MyHomePage> {
 
   @override
   void initState() {
-    currentKey = useSnapshot ? paintKey : imageKey;
+    currentKey = useSnapshot ? paintKey : imageKey;   
     /*
     if (kIsWeb)
     {
@@ -186,6 +199,40 @@ class MyAppState extends State<MyHomePage> {
     final uri = Uri.parse(url);
     final Response response = await get(uri);
     return response.bodyBytes;
+  }
+
+  Future _openDialogButtonPressed({BuildContext? context}) async {
+    if (photo == null) {
+     // await (useSnapshot ? loadSnapshotBytes() : loadImageBundleBytes());
+      return;
+    }
+    if (context == null) {
+     // await (useSnapshot ? loadSnapshotBytes() : loadImageBundleBytes());
+      return;
+    }
+
+    var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImagePopUp(photo: photo!, imageInt8List: _imageInt8List,
+              loadFromNetwork: _loadFromNetwork, mainSelectedColor: selectedColor,
+          )            
+       ),
+    );
+   // print('after navigator: $result');
+
+    if (result is int)
+    {
+      if (result != intHex)
+      {
+        setState(() {
+          intHex = result;
+          selectedColor = Color(intHex);
+          strHex = "0x${intHex.toRadixString(16)}";
+        });
+        Clipboard.setData(ClipboardData(text: strHex));
+      }
+    }
   }
 
   Future _onLoadImageButtonPressed() async
@@ -291,11 +338,164 @@ class MyAppState extends State<MyHomePage> {
 
   }
 
+  ImageProvider getImageProvider(){
+    return _loadFromNetwork == null ? FileImage(File(imagePath!)) :
+      NetworkImage(_loadFromNetwork!) as ImageProvider ;
+  }
+
+  Widget getImageView(){
+   /* return PhotoView(
+      imageProvider: getImageProvider(),
+    );
+    */
+    return PlaceSelectedImage(getImageProvider());
+  }
+
+  Widget getImage(double? pageHeight, double? pageWidth){
+
+      print('- the new height is $pageHeight');
+      print('- the new Width is $pageWidth');
+
+    Widget ret =  (kIsWeb
+                            ?  (_loadFromNetwork == null ? Image.memory(_imageInt8List!,
+                          //     height: 350,
+                          //     width: 400,
+                        //        fit: BoxFit.contain,
+                          //      width: double.infinity, 
+          fit: BoxFit.fitWidth,
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) =>
+                          const Center(
+                              child: Text('This image type is not supported')),
+                          key: imageKey,
+// color: Colors.red,
+ // colorBlendMode: BlendMode.hue,
+// alignment: Alignment.bottomRight,
+                          //       fit: BoxFit.fill,
+// scale: .8,
+                        ) : Image.network(_loadFromNetwork!,    
+                              height: 350,
+                               width: 400,
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) =>
+                          const Center(
+                              child: Text('This image type is not supported')),
+                          key: imageKey,
+                        ))
+                            : (_loadFromNetwork == null ? Image.memory(_imageInt8List!,
+                     //           height: 350,
+                      //         width: 400,
+                            //    fit: BoxFit.contain,
+                       //         width: double.infinity, 
+                               fit: BoxFit.fitWidth,
+//                            fit: BoxFit.cover,
+  //                           cacheWidth: 360,
+    //                         cacheHeight: 360,
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) =>
+                          const Center(
+                              child: Text('This image type is not supported')),
+                          key: imageKey,
+// color: Colors.red,
+// colorBlendMode: BlendMode.hue,
+// alignment: Alignment.bottomRight,
+                          //       fit: BoxFit.fill,
+//scale: .8,
+                        ) : Image.network(_loadFromNetwork!,
+                              height: 350,
+                               width: 400,
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) =>
+                          const Center(
+                              child: Text('This image type is not supported')),
+                          key: imageKey,
+                        )));
+     if (ret is Image)
+     {
+        return /* ImageScroller( */ /* SizedBox( 
+            height: 350, /* pageHeight == null ? 200 : pageHeight, */
+            width: 400, /* pageWidth == null ? 200 : pageWidth, */
+            child: ret,
+            */            
+          //  ),
+          //  );
+       // ret;
+IntrinsicWidth(
+        child:         IntrinsicHeight(
+      child: 
+      SizedBox(
+         height: 350 ,
+         width: 500,
+      //      height: pageHeight == null ? 350 : pageHeight,
+      //      width: pageWidth == null ? 400 : pageWidth,
+            child: ret,
+      ),      
+      ),
+        );
+/*      ),
+       );
+*/
+        /*
+        return IntrinsicHeight(
+      child: IntrinsicWidth(
+      child: SizedBox(
+            height: 300, /* pageHeight == null ? 200 : pageHeight, */
+            width: 400, /* pageWidth == null ? 200 : pageWidth, */
+            child: ret,
+            ),
+            )
+        );
+        */
+        
+        /*
+         CarouselSlider( 
+              items: [ 
+                  
+                //1st Image of Slider 
+                Container( 
+                  margin: EdgeInsets.all(6.0), 
+                  decoration: BoxDecoration( 
+                    borderRadius: BorderRadius.circular(8.0), 
+                    image: DecorationImage( 
+                      image: getImageProvider(), 
+                      fit: BoxFit.cover, 
+                    ), 
+                  ), 
+                ), 
+                  
+  
+          ], 
+              
+            //Slider Container properties 
+              options: CarouselOptions( 
+                height: 180.0, 
+                enlargeCenterPage: true, 
+                autoPlay: true, 
+                aspectRatio: 16 / 9, 
+                autoPlayCurve: Curves.fastOutSlowIn, 
+                enableInfiniteScroll: true, 
+                autoPlayAnimationDuration: Duration(milliseconds: 800), 
+                viewportFraction: 0.8, 
+              ), 
+          );
+          */
+     }                   
+     return ret;                   
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     final String title = useSnapshot ? "snapshot" : "basic";
+    _pageHeight = _globalKey.currentContext?.size?.height;
+    _pageWidth = _globalKey.currentContext?.size?.width;
+
+      print('the new height is $_pageHeight');
+      print('the new Width is $_pageWidth');
+
 
     return SafeArea(
+      minimum: const EdgeInsets.all(10.0),
       child: Scaffold(
         appBar: AppBar(title: Text("Color picker $title from file or url")),
         body: StreamBuilder(
@@ -303,12 +503,15 @@ class MyAppState extends State<MyHomePage> {
             stream: _stateController.stream,
             builder: (buildContext, snapshot) {
               // Color selectedColor = snapshot.data as Color ?? Colors.green;
-              return Column(
+              return Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(                
                 children: [
                   Center(
                     // Center is a layout widget. It takes a single child and positions it
                     // in the middle of the parent.
                     child: Column(
+                      
                       // Column is also a layout widget. It takes a list of children and
                       // arranges them vertically. By default, it sizes itself to fit its
                       // children horizontally, and tries to be as tall as its parent.
@@ -325,7 +528,57 @@ class MyAppState extends State<MyHomePage> {
                       // horizontal).
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
+                          const Row(children: [
+                            Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                                  "1. Select picture to show",
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold
+                                  )
+                              ),
+                              ),
+                          Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                                  "2. Klick on image pixel to show selected color after pressing Open dialog button",
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold
+                                  )
+                              ),
+                              ),
+                               Expanded(child: 
+                               Text("(If selected color is not correct, move/click several times.)", maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  textDirection: TextDirection.rtl,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                    color: Colors.black, fontWeight: FontWeight.bold
+                                  ),
+      ),
+              
+                              ),
+                          ]
+                          ),
+                              Container(                            
+                              margin: const EdgeInsets.all(0.0),                              
+                              decoration: BoxDecoration(                                
+                          color: Colors.white,    
+                          border: Border.all(
+                            width: 2,
+                          ),
+                       //   borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: 
+                        Wrap(   
+             //             spacing: 8.0, // gap between adjacent chips
+               //           runSpacing: 4.0, // gap between lines         
+                        // ignore: unnecessary_const
+                        children: <Widget>[ 
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: MaterialButton(
                               color: Colors.blue,
@@ -355,7 +608,26 @@ class MyAppState extends State<MyHomePage> {
                               }
                           ),
                         ),
-                        TextFormField(                      
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: MaterialButton(
+                              color: Colors.blue,
+                              child: const Text(
+                                  "Open picture dialog",
+                                  style: TextStyle(
+                                      color: Colors.white70, fontWeight: FontWeight.bold
+                                  )
+                              ),
+                              onPressed: () {
+                                _openDialogButtonPressed(context: context);
+                              }
+                          ),
+                        ),
+                                    ]          ,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextFormField(                      
                           decoration: const InputDecoration(
                               hintStyle: TextStyle(fontSize: 17),
                               hintText: 'Enter a picture url to load',
@@ -366,18 +638,46 @@ class MyAppState extends State<MyHomePage> {
                           onChanged: (String val) {
                             _loadUrl = val;
                           },
-                             ),                        
-                        const Text(
-                          'Pixel selection: ',
+                             ),
+                          ),
+                        ],
                         ),
-                        Center(child: Padding(
+                              ),
+                             SizedBox(height: 20),
+                          Container(                            
+                       //     margin: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                          color: Colors.white,    
+                          border: Border.all(
+                            width: 2,
+                          ),
+                       //   borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Wrap(   
+                          spacing: 8.0, // gap between adjacent chips
+                          runSpacing: 4.0, // gap between lines         
+                        // ignore: unnecessary_const
+                        children: <Widget>[
+                        Container(
+                                  color: Colors.white,
+                                  height: 25,
+                                  width: 50,
+                                ),
+                       const Center(child: Text(
+                          'Pixel selection: ',
+                          style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold
+                                  )
+           ),
+                   ),
+                  Center(child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Center(child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               verticalDirection: VerticalDirection.down,
                               children: <Widget>[
                                 Text(
-                                  '$intHex ',
+                                  '$intHex',
                                   style: Theme.of(context).textTheme.headlineSmall,
                                 ),
                                 Text(
@@ -402,7 +702,7 @@ class MyAppState extends State<MyHomePage> {
                           ),
                         ),
                         ),
-                        Row(
+                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               verticalDirection: VerticalDirection.down,
                               children: <Widget>[
@@ -435,6 +735,21 @@ class MyAppState extends State<MyHomePage> {
                               ),
                               ]
                               ),
+                                  Container(
+                                  color: Colors.white,
+                                  height: 25,
+                                  width: 50,
+                                ),
+      ],
+    ),
+    ),   
+                        const Text(
+                          'Pixel selection: ',
+                          style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold
+                                  ),
+                        ),
+                   
                              Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               verticalDirection: VerticalDirection.down,
@@ -452,14 +767,21 @@ class MyAppState extends State<MyHomePage> {
                     ),
                   ),
 
+      /*
       SingleChildScrollView(
-            child: /* ConstrainedBox(
+            child: ?* ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: viewportConstraints.maxHeight,
               ),
               
               child: 
               */
+
+              LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+              _box_width = constraints.maxWidth -100;
+              _box_height = constraints.maxHeight -200;
+            return 
                    RepaintBoundary(
                     key: paintKey,
                     child: GestureDetector(
@@ -469,57 +791,31 @@ class MyAppState extends State<MyHomePage> {
                       onPanUpdate: (details) {
                         searchPixel(details.globalPosition);
                       },
-                      child: Center(
-                        child: (_pickImageError != null ? Text(
+                      child: /* Center( 
+                        child: */ (_pickImageError != null ? Text(
                           'Pick image error: $_pickImageError',
                           textAlign: TextAlign.center,
                         ) : (_imageInt8List == null ? const Text(
                           'Choose an image to show',
                           textAlign: TextAlign.center,
-                        ) : (kIsWeb
-                            ? (_loadFromNetwork == null ? Image.memory(_imageInt8List!,
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) =>
-                          const Center(
-                              child: Text('This image type is not supported')),
-                          key: imageKey,
-// color: Colors.red,
-// colorBlendMode: BlendMode.hue,
-// alignment: Alignment.bottomRight,
-                          //       fit: BoxFit.fill,
-//scale: .8,
-                        ) : Image.network(_loadFromNetwork!,
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) =>
-                          const Center(
-                              child: Text('This image type is not supported')),
-                          key: imageKey,
-                        ))
-                            : (_loadFromNetwork == null ? Image.memory(_imageInt8List!,
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) =>
-                          const Center(
-                              child: Text('This image type is not supported')),
-                          key: imageKey,
-// color: Colors.red,
-// colorBlendMode: BlendMode.hue,
-// alignment: Alignment.bottomRight,
-                          //       fit: BoxFit.fill,
-//scale: .8,
-                        ) : Image.network(_loadFromNetwork!,
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) =>
-                          const Center(
-                              child: Text('This image type is not supported')),
-                          key: imageKey,
-                        )))
-                        )),
+                        ) : /* SizedBox(
+                              child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) { 
+            return getImage(constraints.maxHeight, constraints.maxWidth);        
+        }
+    )
+    )
+    */
+    getImage(_box_height != null ? _box_height : null, _box_width != null ? _box_width : null)
+                        )/* ) , */
                       ),
                     ),
-                  ),
+                  );
+                  }
+                ),
 
               //  ],
-              ),
+         //     ),
          //   ),
         //  ),
     
@@ -551,7 +847,8 @@ class MyAppState extends State<MyHomePage> {
                   */
                 ],
 
-              );
+              ),
+            );
             }
         ),
       ),
