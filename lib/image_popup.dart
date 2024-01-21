@@ -92,7 +92,7 @@ class ImagePopUpState extends State<ImagePopUp> {
       return;
     }
 
-    RenderBox box = /* imageKey  */ paintKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox box = /* imageKey paintKey */ currentKey.currentContext!.findRenderObject() as RenderBox;
     Offset localPosition = box.globalToLocal(globalPosition);
 
     double px = localPosition.dx;
