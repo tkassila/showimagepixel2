@@ -99,7 +99,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///home/tk/Documents/dev/flutter/packages/flutter",
+      "rootUri": "file:///home/tk/fvm/versions/3.19.0/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -117,13 +117,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///home/tk/Documents/dev/flutter/packages/flutter_test",
+      "rootUri": "file:///home/tk/fvm/versions/3.19.0/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///home/tk/Documents/dev/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///home/tk/fvm/versions/3.19.0/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -141,7 +141,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image-4.1.4",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image-4.1.7",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -195,7 +195,25 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/js-0.7.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/js-0.7.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_flutter_testing",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_testing",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
@@ -207,33 +225,33 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/matcher-0.12.16",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/matcher-0.12.16+1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/material_color_utilities-0.5.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/meta-1.10.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/meta-1.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "mime",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/mime-1.0.4",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/mime-1.0.5",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.2"
     },
     {
       "name": "path",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/path-1.8.3",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "petitparser",
@@ -261,7 +279,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///home/tk/Documents/dev/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///home/tk/fvm/versions/3.19.0/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -314,8 +332,14 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "vm_service",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/vm_service-13.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "web",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/web-0.3.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/web-0.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -332,7 +356,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-01-20T03:18:26.567941Z",
+  "generated": "2024-02-18T05:37:23.619037Z",
   "generator": "pub",
-  "generatorVersion": "3.2.4"
+  "generatorVersion": "3.3.0"
 }

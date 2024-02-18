@@ -4,6 +4,9 @@ A zip file is a web deploy. This zip file contains an index file, where base add
 If you wil install this app, unzip this zip file into subdirectory: showpixel and by example to start in some browser,
 write an address like: http://localhost:xxxx/showpixel/ .
 
+When you deployed this web app: flutter build command, remember to update index.html
+base address / into example /showpixel address!
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
