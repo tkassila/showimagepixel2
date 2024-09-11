@@ -7,11 +7,11 @@ base address / into example /showpixel address!
 
 ## Usage
 
-1. Press either button 'Pick ... from gallery' to load local image file. 
+1. After loaded into a browser, press either button 'Pick ... from gallery' to load local image file. 
 2. Or Press either button 'Load network ... image' to load network image.
-3. After loaded image, press mouse buton and click some pixel on below image.
+3. *After loaded image,* it is showing below as smaller picture control. Ppress mouse buton and click some pixel on below image.
 4. Select copy selected color as integer or hex value string into clipboard.
-5. Or press button 'Open picture dialog' to soo more bigger image, which can even zoomed and scrolled more precise.
+5. *Or press button 'Open picture dialog'* to soo more bigger image, which can even zoomed and scrolled more precise.
 6. In this dialog every click with mouse goes into clipboard as hex value. There is copy icon button for copy as integer value also.
    
 ## Getting Started
