@@ -298,17 +298,27 @@ IntrinsicWidth(
     myContext = context;
    // Color mySelectedColor = selectedColor ?? Colors.white;
     String strTitle = 'Select picture color on pixel: $intHex $strHex';
-    return  WillPopScope(
+    return WillPopScope(
     onWillPop: _onBackPressed,
     child: 
     Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            color: Colors.black,          
+          icon: const Icon(Icons.ads_click_sharp),
+          tooltip: 'Copy selected color integer value into clibboard',
+          onPressed: () {
+            Clipboard.setData(ClipboardData(text: intHex.toString()));  
+          },
+        ),
+        ],
         title: Text(strTitle,
         style: TextStyle(
           color: selectedColor!.computeLuminance() > 0.5
                           ? Colors.black
                           : Colors.white, fontWeight: FontWeight.bold,                                  
-          backgroundColor: selectedColor,
+          backgroundColor: selectedColor,          
           )
         ),
       ),
@@ -332,10 +342,12 @@ IntrinsicWidth(
                       },
                       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: getImage(_pageHeight, _pageWidth),
+        child: InteractiveViewer(constrained: true, maxScale: 20,
+        scaleEnabled: true, child: getImage(_pageHeight, _pageWidth),
       ),
                     ),
         ),
+    ),
       ),
     //  ]
     //  ),

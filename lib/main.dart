@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+//  import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:showimagepixel2/image_scroller.dart';
@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Show picture pixel color',
       theme: ThemeData(
         // This is the theme of your application.
