@@ -1,10 +1,8 @@
-2024/09/11-16:51:25.235 1b8c44 Reusing MANIFEST /tmp/flutter_tools.GALLKB/flutter_tools_chrome_device.QFOABP/Default/shared_proto_db/MANIFEST-000001
-2024/09/11-16:51:25.235 1b8c44 Recovering log #13
-2024/09/11-16:51:25.237 1b8c44 Reusing old log /tmp/flutter_tools.GALLKB/flutter_tools_chrome_device.QFOABP/Default/shared_proto_db/000013.log 
-2024/09/11-16:51:25.237 1b8c44 Delete type=0 #10
-2024/09/11-16:51:25.237 1b8c44 Delete type=0 #3
-2024/09/11-16:51:25.237 1b8c44 Delete type=0 #4
-2024/09/11-16:51:25.237 1b8c44 Delete type=0 #7
-2024/09/11-16:51:36.850 1b8c45 Level-0 table #17: started
-2024/09/11-16:51:36.859 1b8c45 Level-0 table #17: 134354 bytes OK
-2024/09/11-16:51:36.871 1b8c45 Delete type=0 #13
+2024/09/11-19:55:39.130 210f5a Reusing MANIFEST /tmp/flutter_tools.IIPRNC/flutter_tools_chrome_device.HMIMHH/Default/shared_proto_db/MANIFEST-000001
+2024/09/11-19:55:39.131 210f5a Recovering log #16
+2024/09/11-19:55:39.132 210f5a Reusing old log /tmp/flutter_tools.IIPRNC/flutter_tools_chrome_device.HMIMHH/Default/shared_proto_db/000016.log 
+2024/09/11-19:55:39.132 210f5a Delete type=0 #10
+2024/09/11-19:55:39.132 210f5a Delete type=0 #3
+2024/09/11-19:55:39.132 210f5a Delete type=0 #4
+2024/09/11-19:55:39.132 210f5a Delete type=0 #13
+2024/09/11-19:55:39.132 210f5a Delete type=0 #7

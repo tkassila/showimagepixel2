@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "archive",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/archive-3.5.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/archive-3.6.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -39,15 +39,15 @@
     },
     {
       "name": "cross_file",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/cross_file-0.3.4+1",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/cross_file-0.3.4+2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "crypto",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/crypto-3.0.3",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/crypto-3.0.5",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.4"
     },
     {
       "name": "cupertino_icons",
@@ -69,9 +69,9 @@
     },
     {
       "name": "file_selector_macos",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.3+3",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.4",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.1"
     },
     {
       "name": "file_selector_platform_interface",
@@ -81,9 +81,9 @@
     },
     {
       "name": "file_selector_windows",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+1",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/file_selector_windows-0.9.3+2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter",
@@ -99,9 +99,9 @@
     },
     {
       "name": "flutter_plugin_android_lifecycle",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.19",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.22",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_test",
@@ -117,7 +117,7 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/http-1.2.1",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/http-1.2.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -129,31 +129,31 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image-4.1.7",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image-4.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "image_picker",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker-1.1.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker-1.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "image_picker_android",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker_android-0.8.10",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+13",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.5"
     },
     {
       "name": "image_picker_for_web",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.4",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker_for_web-3.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "image_picker_ios",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.10+1",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.12",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -225,7 +225,7 @@
     },
     {
       "name": "mime",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/mime-1.0.5",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/mime-1.0.6",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -315,9 +315,9 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/web-0.5.1",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/web-1.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "xml",
@@ -332,7 +332,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-09-10T21:15:44.610351Z",
+  "generated": "2024-09-11T20:46:25.961108Z",
   "generator": "pub",
   "generatorVersion": "3.5.2",
   "flutterRoot": "file:///home/tk/fvm/versions/3.24.2",
