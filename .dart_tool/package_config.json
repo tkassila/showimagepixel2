@@ -87,13 +87,13 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///home/tk/fvm/versions/3.24.0/packages/flutter",
+      "rootUri": "file:///home/tk/fvm/versions/3.24.3/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "flutter_lints",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/flutter_lints-3.0.2",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/flutter_lints-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
@@ -105,13 +105,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///home/tk/fvm/versions/3.24.0/packages/flutter_test",
+      "rootUri": "file:///home/tk/fvm/versions/3.24.3/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///home/tk/fvm/versions/3.24.0/packages/flutter_web_plugins",
+      "rootUri": "file:///home/tk/fvm/versions/3.24.3/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -201,9 +201,9 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/lints-3.0.0",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/lints-4.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.1"
     },
     {
       "name": "matcher",
@@ -255,7 +255,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///home/tk/fvm/versions/3.24.0/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///home/tk/fvm/versions/3.24.3/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -309,7 +309,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/vm_service-14.2.4",
+      "rootUri": "file:///home/tk/.pub-cache/hosted/pub.dev/vm_service-14.2.5",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -332,10 +332,10 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-09-12T18:47:53.415223Z",
+  "generated": "2024-09-13T10:57:56.440009Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0",
-  "flutterRoot": "file:///home/tk/fvm/versions/3.24.0",
-  "flutterVersion": "3.24.0",
+  "generatorVersion": "3.5.3",
+  "flutterRoot": "file:///home/tk/fvm/versions/3.24.3",
+  "flutterVersion": "3.24.3",
   "pubCache": "file:///home/tk/.pub-cache"
 }
