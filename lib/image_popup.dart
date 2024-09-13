@@ -342,7 +342,7 @@ IntrinsicWidth(
                       },
                       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: InteractiveViewer(constrained: true, maxScale: 20,
+        child: InteractiveViewer(constrained: true, maxScale: 40,
         scaleEnabled: true, child: getImage(_pageHeight, _pageWidth),
       ),
                     ),
