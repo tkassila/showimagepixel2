@@ -5,6 +5,10 @@ If you wil install this app, unzip this zip file into subdirectory: showpixel an
 write an address like: http://localhost:xxxx/showpixel/ . When you deployed this web app: flutter build command, remember to update index.html
 base address / into example /showpixel address!
 
+## Install and start
+1. Unzip showimage.zip and start a http server, like node etc.
+2. http://localhost:8080/showimage if you had put showimage under the public directory. See below under 1. number:
+   
 ## Usage
 
 1. After loaded into a browser, press either button 'Pick ... from gallery' to load local image file. 
