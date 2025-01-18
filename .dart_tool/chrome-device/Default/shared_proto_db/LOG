@@ -1,20 +1,13 @@
-2024/09/12-21:48:13.667 2f51f3 Reusing MANIFEST /tmp/flutter_tools.IELWNG/flutter_tools_chrome_device.CPWNYO/Default/shared_proto_db/MANIFEST-000001
-2024/09/12-21:48:13.668 2f51f3 Recovering log #16
-2024/09/12-21:48:13.670 2f51f3 Reusing old log /tmp/flutter_tools.IELWNG/flutter_tools_chrome_device.CPWNYO/Default/shared_proto_db/000016.log 
-2024/09/12-21:48:13.670 2f51f3 Delete type=0 #10
-2024/09/12-21:48:13.670 2f51f3 Delete type=0 #3
-2024/09/12-21:48:13.670 2f51f3 Delete type=0 #4
-2024/09/12-21:48:13.670 2f51f3 Delete type=0 #13
-2024/09/12-21:48:13.670 2f51f3 Delete type=0 #7
-2024/09/12-21:48:24.255 2f51f4 Level-0 table #20: started
-2024/09/12-21:48:24.261 2f51f4 Level-0 table #20: 133842 bytes OK
-2024/09/12-21:48:24.272 2f51f4 Delete type=0 #16
-2024/09/12-21:48:24.272 2f51f4 Compacting 4@0 + 1@1 files
-2024/09/12-21:48:24.277 2f51f4 Generated table #21@0: 1061 keys, 75795 bytes
-2024/09/12-21:48:24.277 2f51f4 Compacted 4@0 + 1@1 files => 75795 bytes
-2024/09/12-21:48:24.281 2f51f4 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/09/12-21:48:24.281 2f51f4 Delete type=2 #11
-2024/09/12-21:48:24.281 2f51f4 Delete type=2 #17
-2024/09/12-21:48:24.281 2f51f4 Delete type=2 #14
-2024/09/12-21:48:24.281 2f51f4 Delete type=2 #20
-2024/09/12-21:48:24.281 2f51f4 Delete type=2 #8
+2025/01/18-02:04:47.594 5375e Reusing MANIFEST /tmp/flutter_tools.IMISBC/flutter_tools_chrome_device.YKGXMR/Default/shared_proto_db/MANIFEST-000001
+2025/01/18-02:04:47.594 5375e Recovering log #19
+2025/01/18-02:04:47.595 5375e Reusing old log /tmp/flutter_tools.IMISBC/flutter_tools_chrome_device.YKGXMR/Default/shared_proto_db/000019.log 
+2025/01/18-02:04:47.596 5375e Delete type=0 #16
+2025/01/18-02:04:47.596 5375e Delete type=2 #11
+2025/01/18-02:04:47.596 5375e Delete type=2 #17
+2025/01/18-02:04:47.596 5375e Delete type=0 #10
+2025/01/18-02:04:47.596 5375e Delete type=2 #14
+2025/01/18-02:04:47.596 5375e Delete type=0 #3
+2025/01/18-02:04:47.596 5375e Delete type=0 #4
+2025/01/18-02:04:47.596 5375e Delete type=0 #13
+2025/01/18-02:04:47.596 5375e Delete type=0 #7
+2025/01/18-02:04:47.597 5375e Delete type=2 #8
