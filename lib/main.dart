@@ -653,10 +653,19 @@ class MyAppState extends State<MyHomePage> {
                                   )
                               ),
                               ),
+                            Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                  "2. Zoom picture out or in with mouse scroll wheel",
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold
+                                  )
+                              ),
+                            ),
                           Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text(
-                                  "2. Klick on image pixel to show selected color after pressing Open dialog button",
+                                  "3. Click on image pixel to show selected color after pressing Open dialog button",
                                   style: TextStyle(
                                       color: Colors.black, fontWeight: FontWeight.bold
                                   )
