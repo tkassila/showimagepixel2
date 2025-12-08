@@ -9,7 +9,7 @@ echo cp $zipfile $zipfileold
 cp $zipfile $zipfileold
 ls -l $zipfile $zipfile_old
 pause
-flutter build web --base-href /showpixel/
+flutter build web --wasm --base-href /showpixel/
 cd build/web
 rm $zipfile
 zip -r $zipfile *

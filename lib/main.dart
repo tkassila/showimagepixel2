@@ -711,6 +711,7 @@ class MyAppState extends State<MyHomePage> {
                                   style: TextStyle(
                                       color: Colors.white70, fontWeight: FontWeight.bold
                                   )
+
                               ),
                               onPressed: () {
                                 _onImageButtonPressed(ImageSource.gallery, context: context);
