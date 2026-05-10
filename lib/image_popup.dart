@@ -11,7 +11,7 @@ class ImagePopUp extends StatefulWidget {
  final   String? loadFromNetwork;
  final Color? mainSelectedColor; // Colors.green;
 
- ImagePopUp(
+ const ImagePopUp(
      { super.key, required this.photo, 
      required this.imageInt8List, required this.loadFromNetwork, 
      required this.mainSelectedColor // Colors.green;
@@ -32,8 +32,8 @@ class ImagePopUpState extends State<ImagePopUp> {
   double y = 0.0;
 //  String? _loadUrl;
   Color? selectedColor;
-  double? _pageHeight = 0.0;
-  double? _pageWidth = 0.0;
+  final double? _pageHeight = 0.0;
+  final double? _pageWidth = 0.0;
   BuildContext? myContext;
   bool useSnapshot = false;
   ByteData? snapShotBytes;
@@ -106,16 +106,19 @@ class ImagePopUpState extends State<ImagePopUp> {
     }
 
     img.Pixel pixel32 = widget.photo!.getPixelSafe(px.toInt(), py.toInt());
-    int hex = hexOfRGB(pixel32.r.toInt(), pixel32.g.toInt(), pixel32.b.toInt()); // pixel32.toString();
+   // int hex = hexOfRGB(pixel32.r.toInt(), pixel32.g.toInt(), pixel32.b.toInt()); // pixel32.toString();
     // int hex = abgrToArgb(pixel32);
-
     setState(() {
-      intHex = hex;
+    //  intHex = hex;
       x = px;
       y = px;
-      selectedColor = Color(intHex);
+      selectedColor = /* ui.Color(intHex); */ Color.fromARGB(
+          pixel32.a.toInt(), pixel32.r.toInt(), pixel32.r.toInt(),
+          pixel32.b.toInt());
+      intHex = selectedColor!.value;
       strHex = "0x${intHex.toRadixString(16)}";
     });
+    print("calculate intHex: " +intHex.toString());
     Clipboard.setData(ClipboardData(text: strHex)); /*.then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Copied to your clipboard !')));
@@ -146,7 +149,7 @@ class ImagePopUpState extends State<ImagePopUp> {
     super.initState();
     currentKey = useSnapshot ? paintKey : imageKey;   
     selectedColor = widget.mainSelectedColor;
-    intHex = (selectedColor != null && selectedColor!.value != null ? selectedColor!.value : 0);
+    intHex = (selectedColor != null ? selectedColor!.value : 0);
     strHex = "0x${intHex.toRadixString(16)}";
   }
 
@@ -290,7 +293,7 @@ IntrinsicWidth(
     {
       Navigator.of(myContext!).pop(intHex);
     }
-    return await bValue;
+    return bValue;
   }
 
   @override
@@ -307,25 +310,30 @@ IntrinsicWidth(
           IconButton(
             color: Colors.black,          
           icon: const Icon(Icons.ads_click_sharp),
-          tooltip: 'Copy selected color integer value into clibboard',
+          tooltip: 'Copy selected color integer value into clipboard',
           onPressed: () {
             Clipboard.setData(ClipboardData(text: intHex.toString()));  
           },
         ),
         ],
-        title: Text(strTitle,
+        title: Row(children: [
+          Text(strTitle,
         style: TextStyle(
-          color: selectedColor!.computeLuminance() > 0.5
-                          ? Colors.black
-                          : Colors.white, fontWeight: FontWeight.bold,                                  
-          backgroundColor: selectedColor,          
-          )
+          color: /* selectedColor!.computeLuminance() > 0.5
+                          ? */ Colors.black
+                         /* : Colors.white */, fontWeight: FontWeight.bold,
+         /* backgroundColor: selectedColor, */
+          ),
         ),
+          SizedBox(height: 30, width: 10,),
+          Container(height: 30, width: 200, color: selectedColor),
+          ],
+      ),
       ),
       body: /* Column(
            mainAxisAlignment: MainAxisAlignment.center,
-           children: <Widget>[ 
-            const Row(children: [ 
+           children: <Widget>[
+            const Row(children: [
               Text("column 2"),
       ]
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
     
 class ImageScroller extends StatelessWidget {
-      ImageScroller(this.imageWidget, {Key? key}) : super(key: key);
+      ImageScroller(this.imageWidget, {super.key});
 
       final ScrollController controller = ScrollController();
       final ScrollController controller2 = ScrollController();

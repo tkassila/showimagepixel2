@@ -2,6 +2,7 @@
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:http/http.dart';
 // import 'package:flutter/painting.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
       home: MyHomePage(title: 'Show clicked color pixel', ipv4: ipv4,),
     );
@@ -123,7 +125,7 @@ class MyAppState extends State<MyHomePage> {
   img.Image? unModifiedLoadPhoto;
   ByteData? snapShotBytes;
   int intHex = 0;
-  String strHex = "";
+  late String strHex = "";
   double x = 0.0;
   double y = 0.0;
   ByteData? /* Uint8List? */ _imageBytes;
@@ -138,7 +140,7 @@ class MyAppState extends State<MyHomePage> {
   final MethodChannel _channel = const MethodChannel('get_ip');
   double? _pageHeight = 0.0;
   double? _pageWidth = 0.0;
-  GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
 
   @override
   void dispose() {
@@ -231,15 +233,14 @@ class MyAppState extends State<MyHomePage> {
 
     if (result is int)
     {
-      if (result != intHex)
-      {
+     // if (result != intHex)
+     // {
         setState(() {
           intHex = result;
-          selectedColor = Color(intHex);
+          selectedColor = ui.Color(intHex);
           strHex = "0x${intHex.toRadixString(16)}";
         });
-        Clipboard.setData(ClipboardData(text: strHex));
-      }
+   //   }
     }
   }
 
@@ -586,6 +587,27 @@ class MyAppState extends State<MyHomePage> {
     _pageHeight = _globalKey.currentContext?.size?.height;
     _pageWidth = _globalKey.currentContext?.size?.width;
 
+    Widget floatingButton = FloatingActionButton(
+      heroTag: null,
+      tooltip: 'Clicked color',
+      onPressed: null,
+      backgroundColor: selectedColor ?? Colors.green,
+    );
+
+    floatingButton = Center(child: SizedBox(height: 60, width: 60,
+        child: Container(child: null,
+        decoration: BoxDecoration(
+          color: selectedColor == null ? Colors.green : selectedColor,
+          border: Border.all(
+              color: Colors.black,
+              width: 2,
+            ),
+          ),
+
+        ),
+        ),
+      );
+
       /*
       print('the new height is $_pageHeight');
       print('the new Width is $_pageWidth');
@@ -596,7 +618,7 @@ class MyAppState extends State<MyHomePage> {
                           builder: (context, value, _) => CircularProgressIndicator(value: value,
                            semanticsLabel: 'Loading...',                           
               semanticsValue: 'Loading...',              
-              strokeWidth: 20.0,),
+              strokeWidth: 10.0,),
               );
 
     return SafeArea(
@@ -608,97 +630,81 @@ class MyAppState extends State<MyHomePage> {
             stream: _stateController.stream,
             builder: (buildContext, snapshot) {
               // Color selectedColor = snapshot.data as Color ?? Colors.green;
-              return loading
-          ? const Center(
+              if (loading) {
+                return /* const */ const Center(
                 heightFactor: 10,
-                child: Text('Loading...',                           
+                child: /* Text('Loading...',
                 style: TextStyle(fontSize: 27,
                           backgroundColor: Colors.orange,
                           color: Colors.black, fontWeight: FontWeight.bold),
                 )
-            )      
-           :
-              Container(
+                */
+                CircularProgressWithText(text: 'Loading...'),
+            );
+              } else {
+                return Container(
                 padding: const EdgeInsets.all(5.0),
-                child: Column(                
+                child: Column(
                 children: [
                   Center(
                     // Center is a layout widget. It takes a single child and positions it
                     // in the middle of the parent.
                     child: Column(
-                      
-                      // Column is also a layout widget. It takes a list of children and
-                      // arranges them vertically. By default, it sizes itself to fit its
-                      // children horizontally, and tries to be as tall as its parent.
-                      //
-                      // Invoke "debug painting" (press "p" in the console, choose the
-                      // "Toggle Debug Paint" action from the Flutter Inspector in Android
-                      // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-                      // to see the wireframe for each widget.
-                      //
-                      // Column has various properties to control how it sizes itself and
-                      // how it positions its children. Here we use mainAxisAlignment to
-                      // center the children vertically; the main axis here is the vertical
-                      // axis because Columns are vertical (the cross axis would be
-                      // horizontal).
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                          const Row(children: [
-                            Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
+                          const Column(children: [
+                            Text(
                                   "1. Select picture to show",
                                   style: TextStyle(
-                                      color: Colors.black, fontWeight: FontWeight.bold
-                                  )
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                  ),
                               ),
-                              ),
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
+                              Text(
                                   "2. Zoom picture out or in with mouse scroll wheel",
                                   style: TextStyle(
+                                      fontSize: 18,
                                       color: Colors.black, fontWeight: FontWeight.bold
                                   )
                               ),
-                            ),
-                          Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
+                             Text(
                                   "3. Click on image pixel to show selected color after pressing Open dialog button",
                                   style: TextStyle(
-                                      color: Colors.black, fontWeight: FontWeight.bold
-                                  )
+                                    fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold
+                                  ),
                               ),
-                              ),
-                               Expanded(child: 
-                               Text("(If selected color is not correct, move/click several times.)", maxLines: 3,
+                               Padding(
+                                 padding: EdgeInsets.all(5.0),
+                                 child: Text(
+                                  "(If selected color is not correct, move/click several times.)",
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
-                                  textDirection: TextDirection.rtl,
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
                                     color: Colors.black, fontWeight: FontWeight.bold
                                   ),
-      ),
-              
+                                ),
                               ),
                           ]
                           ),
-                              Container(                            
-                              margin: const EdgeInsets.all(0.0),                              
-                              decoration: BoxDecoration(                                
-                          color: Colors.white,    
+                              Container(
+                              margin: const EdgeInsets.all(0.0),
+                              decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(
                             width: 2,
                           ),
                        //   borderRadius: BorderRadius.circular(12),
                         ),
-                        child: 
-                        Wrap(   
+                        child:
+                        Wrap(
              //             spacing: 8.0, // gap between adjacent chips
-               //           runSpacing: 4.0, // gap between lines         
+               //           runSpacing: 4.0, // gap between lines
                         // ignore: unnecessary_const
-                        children: <Widget>[ 
+                        children: <Widget>[
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -752,7 +758,7 @@ class MyAppState extends State<MyHomePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: TextFormField(                      
+                          child: TextFormField(
                           decoration: const InputDecoration(
                               hintStyle: TextStyle(fontSize: 17),
                               hintText: 'Enter a picture url to load',
@@ -771,27 +777,24 @@ class MyAppState extends State<MyHomePage> {
                         const SizedBox(height: 5),
                         SizedBox(height: 20,
                               width: double.infinity,
-                          child: FloatingActionButton(
-                                  heroTag: null,
-                                  tooltip: 'Clicked color',
-                                  onPressed: null,
-                                  backgroundColor: selectedColor ?? Colors.green,
-                                ),
+                          child: Container(child: null,
+                            color: selectedColor == null ? Colors.green : selectedColor,
+                          ),
                         ),
                         const SizedBox(height: 5),
 
-                          Container(                            
+                          Container(
                        //     margin: const EdgeInsets.all(10.0),
                               decoration: BoxDecoration(
-                          color: Colors.white,    
+                          color: Colors.white,
                           border: Border.all(
                             width: 2,
                           ),
                        //   borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Wrap(   
+                        child: Wrap(
                           spacing: 8.0, // gap between adjacent chips
-                          runSpacing: 4.0, // gap between lines         
+                          runSpacing: 4.0, // gap between lines
                         // ignore: unnecessary_const
                         children: <Widget>[
                         Container(
@@ -801,8 +804,8 @@ class MyAppState extends State<MyHomePage> {
                                   width: 50,
                                 ),
                        const Center(child: Text(
-                          'Pixel selection: ',
-                          style: TextStyle(
+                          'Pixel selection: (Flutter: copy/paste color code)',
+                          style: TextStyle(fontSize: 18,
                                       color: Colors.black, fontWeight: FontWeight.bold
                                   )
            ),
@@ -821,22 +824,23 @@ class MyAppState extends State<MyHomePage> {
                                   ' ',
                                   style: Theme.of(context).textTheme.headlineSmall,
                                 ),
-                                FloatingActionButton(
+                               /* FloatingActionButton(
                                   heroTag: null,
                                   tooltip: 'Clicked color',
-                                  onPressed: null,
+                                  onPressed: (){},
                                   backgroundColor: selectedColor ?? Colors.green,
-                                ),
+                                ) */
+                                floatingButton,
                                 Text(
                                   ' ',
                                   style: Theme.of(context).textTheme.headlineSmall,
                                 ),
-                                Text(
+                                SelectableText(
                                   selectedColor == null ? '' : selectedColor.toString(),
                                   style: Theme.of(context).textTheme.headlineSmall,
                                 ),// This trailing comma makes auto-formatting nicer for build methods.
                               ]
-                          ),                          
+                          ),
                           ),
                         ),
                         ),
@@ -848,13 +852,12 @@ class MyAppState extends State<MyHomePage> {
                                 style: TextButton.styleFrom(
                                 foregroundColor: Colors.white,
                                 backgroundColor: Colors.blue,
-                                ),                                
+                                ),
                                 onPressed: () async {
-                                    Clipboard.setData(ClipboardData(text: intHex.toString()));                                  
-                                },                                          
+                                    Clipboard.setData(ClipboardData(text: intHex.toString()));
+                                },
                                 child: const Text("Copy int color value into clipboard"),
                               ),
-                         
                               TextButton(
                                 style: TextButton.styleFrom(
                                 foregroundColor: Colors.white,
@@ -863,9 +866,9 @@ class MyAppState extends State<MyHomePage> {
                                 onPressed: () async {
                                   if (!_isButtonDisabled)
                                   {
-                                    Clipboard.setData(ClipboardData(text: strHex));
+                                    Clipboard.setData(ClipboardData(text: strHex ));
                                   }
-                                },                                          
+                                },
                                 child: const Text("Copy hex color value into clipboard"),
                               ),
                               ]
@@ -877,27 +880,15 @@ class MyAppState extends State<MyHomePage> {
                                 ),
       ],
     ),
-    ),   
+    ),
                         const Text(
                           'Pixel selection: ',
                           style: TextStyle(
                                       color: Colors.black, fontWeight: FontWeight.bold
                                   ),
                         ),
-                   
-                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              verticalDirection: VerticalDirection.down,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                  color: Colors.white,
-                                  height: 50,
-                                  width: 50,
-                                ),
-                              ),
-                          ],
-                        ),
+
+
                       ],
                     ),
                   ),
@@ -908,15 +899,15 @@ class MyAppState extends State<MyHomePage> {
               constraints: BoxConstraints(
                 minHeight: viewportConstraints.maxHeight,
               ),
-              
-              child: 
+
+              child:
               */
 
               LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
               _box_width = constraints.maxWidth -100;
               _box_height = constraints.maxHeight -200;
-            return 
+            return
                    RepaintBoundary(
                     key: paintKey,
                     child: GestureDetector(
@@ -926,7 +917,7 @@ class MyAppState extends State<MyHomePage> {
                       onPanUpdate: (details) {
                         searchPixel(details.globalPosition);
                       },
-                      child: /* Center( 
+                      child: /* Center(
                         child: */ (_pickImageError != null ? Text(
                           'Pick image error: $_pickImageError',
                           textAlign: TextAlign.center,
@@ -935,13 +926,13 @@ class MyAppState extends State<MyHomePage> {
                           textAlign: TextAlign.center,
                         ) : /* SizedBox(
                               child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) { 
-            return getImage(constraints.maxHeight, constraints.maxWidth);        
+        builder: (BuildContext context, BoxConstraints constraints) {
+            return getImage(constraints.maxHeight, constraints.maxWidth);
         }
     )
     )
     */
-    getImage(_box_height != null ? _box_height : null, _box_width != null ? _box_width : null)
+    getImage(_box_height, _box_width)
                         )/* ) , */
                       ),
                     ),
@@ -953,8 +944,8 @@ class MyAppState extends State<MyHomePage> {
          //     ),
          //   ),
         //  ),
-    
-                
+
+
                   /*
                   Container(
                     margin: const EdgeInsets.all(70),
@@ -984,6 +975,7 @@ class MyAppState extends State<MyHomePage> {
 
               ),
             );
+              }
             }
         ),
       ),
@@ -1018,14 +1010,17 @@ class MyAppState extends State<MyHomePage> {
     }
 
     img.Pixel pixel32 = photo!.getPixelSafe(px.toInt(), py.toInt());
-    int hex = hexOfRGB(pixel32.r.toInt(), pixel32.g.toInt(), pixel32.b.toInt()); // pixel32.toString();
+   // int hex = hexOfRGB(pixel32.r.toInt(), pixel32.g.toInt(), pixel32.b.toInt()); // pixel32.toString();
     // int hex = abgrToArgb(pixel32);
 
     setState(() {
-      intHex = hex;
+     // intHex = hex;
       x = px;
       y = px;
-      selectedColor = Color(intHex);
+      selectedColor = /* ui.Color(intHex); */ Color.fromARGB(
+          pixel32.a.toInt(), pixel32.r.toInt(), pixel32.r.toInt(),
+          pixel32.b.toInt());
+      intHex = selectedColor!.value;
       strHex = "0x${intHex.toRadixString(16)}";
     });
     Clipboard.setData(ClipboardData(text: strHex)); /*.then((_) {
@@ -1034,7 +1029,7 @@ class MyAppState extends State<MyHomePage> {
     });
     */
     _isButtonDisabled = false;
-    _stateController.add(Color(hex));
+    _stateController.add(Color(intHex));
   }
 
   int hexOfRGB(int r,int g,int b)
@@ -1093,5 +1088,100 @@ class MyAppState extends State<MyHomePage> {
     int r = (argbColor >> 16) & 0xFF;
     int b = argbColor & 0xFF;
     return (argbColor & 0xFF00FF00) | (b << 16) | r;
+  }
+}
+
+
+class CircularProgressWithText extends StatelessWidget {
+  final String text;
+
+  const CircularProgressWithText({super.key, required this.text,});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _CircularProgressPainter(8),
+      child: Container(
+        width: 240,
+        height: 240,
+        alignment: Alignment.center,
+        child: OutlinedText(text),
+      ),
+    );
+  }
+}
+
+class _CircularProgressPainter extends CustomPainter {
+  final double percentage;
+
+  _CircularProgressPainter(this.percentage);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..strokeWidth = 10
+      ..color = Colors.blue
+      ..style = PaintingStyle.stroke;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = min(size.width / 2, size.height / 2);
+
+    canvas.drawCircle(center, radius, paint);
+
+    final progressPaint = Paint()
+      ..strokeWidth = 10
+      ..color = Colors.green
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    double arcAngle = 2 * pi * (percentage / 100);
+
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2,
+        arcAngle, false, progressPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class OutlinedText extends StatelessWidget {
+  final String text;
+
+  const OutlinedText(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+  //  final primaryColor = Colors.black.withOpacity(0.5);
+    final primaryColor = Colors.blueAccent;
+    final textStyle = TextStyle(
+      shadows: [
+        Shadow(
+          color: primaryColor,
+          blurRadius: 5,
+          offset: const Offset(0, 0),
+        )
+      ],
+      color: Colors.white,
+      fontSize: 42,
+      fontWeight: FontWeight.bold,
+    );
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Text(
+          text,
+          style: textStyle.copyWith(
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..color = primaryColor
+              ..strokeWidth = 2,
+            color: null,
+          ),
+        ),
+        Text(text, style: textStyle),
+      ],
+    );
   }
 }

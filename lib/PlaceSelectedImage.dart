@@ -5,8 +5,8 @@ class PlaceSelectedImage extends StatefulWidget{
 final ImageProvider image;
 const PlaceSelectedImage(
     this.image,
-     { Key? key,
-  }) : super(key: key);
+     { super.key,
+  });
 @override
 PlaceSelectedImageState createState() => PlaceSelectedImageState();
 }
