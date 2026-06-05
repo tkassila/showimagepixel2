@@ -652,7 +652,7 @@ class MyAppState extends State<MyHomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                          const Column(children: [
+                          const Row(spacing: 15.0, children: [
                             Text(
                                   "1. Select picture to show",
                                   style: TextStyle(
@@ -677,7 +677,7 @@ class MyAppState extends State<MyHomePage> {
                                   ),
                               ),
                                Padding(
-                                 padding: EdgeInsets.all(5.0),
+                                 padding: EdgeInsets.all(3.0),
                                  child: Text(
                                   "(If selected color is not correct, move/click several times.)",
                                   maxLines: 3,
@@ -709,7 +709,7 @@ class MyAppState extends State<MyHomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                             Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(3.0),
                           child: MaterialButton(
                               color: Colors.blue,
                               child: const Text(
@@ -725,7 +725,7 @@ class MyAppState extends State<MyHomePage> {
                           ),
                         ),
                          Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(3.0),
                           child: MaterialButton(
                               color: Colors.blue,
                               child: const Text(
@@ -740,7 +740,7 @@ class MyAppState extends State<MyHomePage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(3.0),
                           child: MaterialButton(
                               color: Colors.blue,
                               child: const Text(
@@ -757,7 +757,7 @@ class MyAppState extends State<MyHomePage> {
                                     ]          ,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
                           decoration: const InputDecoration(
                               hintStyle: TextStyle(fontSize: 17),
@@ -793,7 +793,7 @@ class MyAppState extends State<MyHomePage> {
                        //   borderRadius: BorderRadius.circular(12),
                         ),
                         child: Wrap(
-                          spacing: 8.0, // gap between adjacent chips
+                          spacing: 5.0, // gap between adjacent chips
                           runSpacing: 4.0, // gap between lines
                         // ignore: unnecessary_const
                         children: <Widget>[
@@ -811,7 +811,7 @@ class MyAppState extends State<MyHomePage> {
            ),
                    ),
                   Center(child: Padding(
-                          padding: const EdgeInsets.all(5.0),
+                          padding: const EdgeInsets.all(3.0),
                           child: Center(child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               verticalDirection: VerticalDirection.down,

@@ -37,10 +37,16 @@
     const serviceWorkerVersion = null;
   </script>
   <!-- This script adds the flutter initialization JS code -->
+  <!--
   <script src="flutter.js" defer></script>
+  -->
 </head>
 <body>
+<!-- Latausanimaatio tai placeholder-elementti -->
+<div id="loading">Ladataan sovellusta...</div>
+<script src="flutter_bootstrap.js" async></script>
   <script>
+    /*
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
@@ -53,6 +59,29 @@
           });
         }
       });
+    });
+    */
+      window.addEventListener('load', function(ev) {
+      // Varmistetaan, että Flutter-lataaja on valmis
+      if (window._flutter && window._flutter.loader) {
+
+        // Kutsutaan load() suoraan ilman erillistä loadEntrypoint-vaihetta
+        window._flutter.loader.load({
+          onEntrypointLoaded: async function(engineInitializer) {
+            // Alustetaan Flutter-moottori
+            const appRunner = await engineInitializer.initializeEngine();
+
+            // Piilotetaan latausindikaattori ennen sovelluksen käynnistystä
+            document.getElementById('loading').remove();
+
+            // Käynnistetään Flutter-sovellus
+            await appRunner.runApp();
+          }
+        });
+
+      } else {
+        console.error('Flutter-lataajaa ei löytynyt.');
+      }
     });
   </script>
 </body>
