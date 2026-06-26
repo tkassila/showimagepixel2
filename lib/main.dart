@@ -145,6 +145,7 @@ class MyAppState extends State<MyHomePage> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
+        _stateController.dispose();
         _controller.dispose();
         super.dispose();
   }
